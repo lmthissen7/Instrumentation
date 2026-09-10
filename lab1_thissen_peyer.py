@@ -7,8 +7,8 @@ import pandas as pd
 import matplotlib.pyplot as pp
 import numpy as np 
 
-#read in txt
-# sep='\s+' is the same as delim_whitespace = true
+# read in the data from txt files
+# sep ='\s+' is the same as delim_whitespace = true
 col_names = ('ms', 'CH01')
 df_iw_rw = pd.read_csv('fine_iw_rw.TXT', encoding = 'latin', header = 0, sep = '\\s+', usecols = [0,2], names = col_names)
 
