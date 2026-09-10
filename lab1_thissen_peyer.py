@@ -75,9 +75,13 @@ pp.ylabel('Temperature (°C)')
 pp.xlabel('Time (Seconds)')
 pp.savefig('instrumentation_lab1_thissen_peyer_ra_ia.png', dpi=300)
 
-# Conditioning the data for iw_rw
 
 
-# Math function
+
+# The function to calculate tau outside of graphing
+def calculateTau(T, T_a, T_o):
+    step1 = (T - T_a) / (T_o - T_a)
+    tau = np.log(step1)*-1
+    return tau
 
     
