@@ -75,7 +75,7 @@ pp.ylabel('Temperature (°C)')
 pp.xlabel('Time (Seconds)')
 pp.savefig('instrumentation_lab1_thissen_peyer_ra_ia.png', dpi=300)
 
-# Conditioning the data for iw_rw
+
 
 
 # Math functions
