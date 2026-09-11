@@ -78,6 +78,9 @@ pp.savefig('instrumentation_lab1_thissen_peyer_ra_ia.png', dpi=300)
 # Conditioning the data for iw_rw
 
 
-# Math function
-
-    
+# Math functions
+# The function to calculate the y-axis values
+def calculateYaxis(T, T_a, T_o):
+    step1 = (T - T_a) / (T_o - T_a)
+    tau = np.log(step1)*-1
+    return tau 
