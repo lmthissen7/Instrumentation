@@ -1,6 +1,6 @@
 # this code is for lab 1 of instrumentation--time response
-#Lynne Thissen and Nathaniel Peyer
-#I have neither given or received, nor have I tolerated others' use of unauthorized aid
+# Lynne Thissen and Nathaniel Peyer
+# I have neither given or received, nor have I tolerated others' use of unauthorized aid
 
 #import statements
 import pandas as pd
