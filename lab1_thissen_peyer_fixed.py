@@ -1,6 +1,6 @@
-# For lab 1 of instrumentation--doing the calculations and now the graphs w/ consideration for stablization time
+# For lab 1 of instrumentation--doing the calculations and now the graphs w/ consideration for stabilization time
 # Lynne Thissen and Nate Peyer
-# I have neither given or received, nor have I tolerated others' use of unauthorized aid
+# I have neither given nor received, nor have I tolerated others' use of unauthorized aid
 
 # imports
 import pandas as pd
@@ -8,12 +8,22 @@ import numpy as np
 from scipy.stats import linregress
 import matplotlib.pyplot as pp
 
-# Read data
+# Read the data.
 col_names = ('time', 'temperature')
 df_iw_rw = pd.read_csv('fine_iw_rw.TXT', encoding='latin', sep=r'\s+', usecols=[0, 2], names=col_names, header=0)
 df_rw_iw = pd.read_csv('fine_rw_iw.TXT', encoding='latin', sep=r'\s+', usecols=[0, 2], names=col_names, header=0)
 df_ia_ra = pd.read_csv('standard_ia_ra.TXT', encoding='latin', sep=r'\s+', usecols=[0, 2], names=col_names, header=0)
 df_ra_ia = pd.read_csv('standard_ra_ia.TXT', encoding='latin', sep=r'\s+', usecols=[0, 2], names=col_names, header=0)
+
+temp = df_iw_rw['temperature'].values
+time = df_iw_rw['time'].values
+
+fig, ax = pp.subplots()
+pp.plot(time[102:139], temp[102:139])
+ax.set_title('LN vs Time (Seconds)\nIce Water to Room Water (Fine)\nLynne Thissen and Nate Peyer', fontsize = 10)
+pp.ylabel('temperature (°C)')
+pp.xlabel('Time (Seconds)')
+pp.savefig('iw_rw_ln.png', dpi=300)
 
 
 # Convert time and temperature
@@ -60,21 +70,21 @@ pp.xlabel('Time (seconds)')
 pp.savefig('ra_ia.png')
 
 # Make reduced datasets for tau 
-def reduce_data(time, temperature, cutoff):
-    valid = time <= cutoff
+def reduce_data(time, temperature, cutOffLow, cutOffHigh):
+    valid = (time >= cutOffLow) & (time <= cutOffHigh)
     return time[valid], temperature[valid]
 
-calc_time_iw_rw, calc_temp_iw_rw = reduce_data(time_iw_rw, temp_iw_rw, 8)
-calc_time_rw_iw, calc_temp_rw_iw = reduce_data(time_rw_iw, temp_rw_iw, 8)
-calc_time_ia_ra, calc_temp_ia_ra = reduce_data(time_ia_ra, temp_ia_ra, 75)
-calc_time_ra_ia, calc_temp_ra_ia = reduce_data(time_ra_ia, temp_ra_ia, 75)
+calc_time_iw_rw, calc_temp_iw_rw = reduce_data(time_iw_rw, temp_iw_rw, 5, 8)
+calc_time_rw_iw, calc_temp_rw_iw = reduce_data(time_rw_iw, temp_rw_iw, 4, 5)
+calc_time_ia_ra, calc_temp_ia_ra = reduce_data(time_ia_ra, temp_ia_ra, 10, 60)
+calc_time_ra_ia, calc_temp_ra_ia = reduce_data(time_ra_ia, temp_ra_ia, 10, 45)
 
 # calculate!!
 # 1/e
 def calculate_tau_1e(time, temperature):
     T0 = temperature[0]
     Ta = temperature[-1]
-    T_tau = T0 + 0.632 * (Ta - T0)
+    T_tau = T0 + (Ta - T0) * (.637)
     index = np.argmin(np.abs(temperature - T_tau))
     return time[index]
 
@@ -97,6 +107,14 @@ results = {'Ice Water -> Room Water (Fine)': (calculate_tau_1e(calc_time_iw_rw, 
            'Room Air -> Ice Air (Standard)': (calculate_tau_1e(calc_time_ra_ia, calc_temp_ra_ia),
                                               calculate_tau_ln(calc_time_ra_ia, calc_temp_ra_ia))
 }
+
+fig, ax = pp.subplots()
+pp.plot(calc_time_iw_rw, calc_temp_iw_rw)
+ax.set_title('LN vs Time (Seconds)\nIce Water to Room Water (Fine)\nLynne Thissen and Nate Peyer', fontsize = 10)
+pp.ylabel('temperature (°C)')
+pp.xlabel('Time (Seconds)')
+pp.savefig('iw_rw_ln.png', dpi=300)
+
 #Print output please
 print('Time Constants:')
 for name, (tau_1e, tau_ln) in results.items():
